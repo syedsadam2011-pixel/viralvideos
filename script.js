@@ -1,5 +1,5 @@
 /* =========================================================
-   VIRALVIDEOS - SUPABASE CONNECTION
+   VIRALVIDEOS - SUPABASE
 ========================================================= */
 
 const SUPABASE_URL =
@@ -16,29 +16,41 @@ const vvSupabase =
 
 
 /* =========================================================
+   SECURITY / HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
    SEARCH
 ========================================================= */
 
 function searchSite() {
 
     const input =
-        document.getElementById("searchInput") ||
-        document.getElementById("search");
+        document.getElementById("searchInput");
 
     if (!input) return;
 
-    const query = input.value.trim();
+    const query =
+        input.value.trim().toLowerCase();
 
     if (!query) {
-        alert("Please enter a search term.");
+
+        loadVideos();
         return;
     }
 
-    alert(
-        "Search: " +
-        query +
-        "\n\nSearch system will be connected to the database."
-    );
+    loadVideos(query);
 }
 
 
@@ -76,26 +88,29 @@ async function adminLogin() {
         passwordElement.value;
 
     if (!email) {
+
         status.textContent =
             "Please enter admin email.";
+
         status.style.color =
             "#ff6b6b";
+
         return;
     }
 
     if (!password) {
+
         status.textContent =
             "Please enter admin password.";
+
         status.style.color =
             "#ff6b6b";
+
         return;
     }
 
     status.textContent =
         "Logging in...";
-
-    status.style.color =
-        "#ffffff";
 
     try {
 
@@ -107,14 +122,6 @@ async function adminLogin() {
 
         if (result.error) {
             throw result.error;
-        }
-
-        if (!result.data ||
-            !result.data.session) {
-
-            throw new Error(
-                "Login session was not created."
-            );
         }
 
         status.textContent =
@@ -138,7 +145,7 @@ async function adminLogin() {
     } catch (error) {
 
         console.error(
-            "Admin Login Error:",
+            "Login Error:",
             error
         );
 
@@ -153,7 +160,7 @@ async function adminLogin() {
 
 
 /* =========================================================
-   ADMIN LOGOUT
+   LOGOUT
 ========================================================= */
 
 async function adminLogout() {
@@ -187,30 +194,7 @@ async function adminLogout() {
                 "none";
         }
 
-        const email =
-            document.getElementById(
-                "adminUsername"
-            );
-
-        const password =
-            document.getElementById(
-                "adminPassword"
-            );
-
-        if (email) {
-            email.value = "";
-        }
-
-        if (password) {
-            password.value = "";
-        }
-
     } catch (error) {
-
-        console.error(
-            "Logout Error:",
-            error
-        );
 
         alert(
             "Logout failed: " +
@@ -221,7 +205,7 @@ async function adminLogout() {
 
 
 /* =========================================================
-   CHECK LOGIN SESSION
+   SESSION
 ========================================================= */
 
 async function checkAdminSession() {
@@ -260,8 +244,6 @@ async function checkAdminSession() {
                     "block";
             }
 
-            await updateDashboardStats();
-
         } else {
 
             if (loginSection) {
@@ -286,7 +268,7 @@ async function checkAdminSession() {
 
 
 /* =========================================================
-   VIDEO UPLOAD
+   UPLOAD VIDEO
 ========================================================= */
 
 async function uploadVideo() {
@@ -327,9 +309,6 @@ async function uploadVideo() {
         status.textContent =
             "Please enter a video title.";
 
-        status.style.color =
-            "#ff6b6b";
-
         return;
     }
 
@@ -338,34 +317,24 @@ async function uploadVideo() {
         status.textContent =
             "Please enter a video category.";
 
-        status.style.color =
-            "#ff6b6b";
-
         return;
     }
 
-    if (!fileInput.files ||
-        fileInput.files.length === 0) {
+    if (!fileInput.files.length) {
 
         status.textContent =
-            "Please select a video file.";
-
-        status.style.color =
-            "#ff6b6b";
+            "Please select a video.";
 
         return;
     }
 
-    const sessionResult =
+    const session =
         await vvSupabase.auth.getSession();
 
-    if (!sessionResult.data.session) {
+    if (!session.data.session) {
 
         status.textContent =
             "Please login as admin first.";
-
-        status.style.color =
-            "#ff6b6b";
 
         return;
     }
@@ -375,9 +344,6 @@ async function uploadVideo() {
 
     status.textContent =
         "Uploading video...";
-
-    status.style.color =
-        "#ffffff";
 
     try {
 
@@ -404,11 +370,9 @@ async function uploadVideo() {
             "videos/" + fileName;
 
 
-        /* -------------------------------
-           UPLOAD TO STORAGE
-        -------------------------------- */
+        /* STORAGE */
 
-        const uploadResult =
+        const upload =
             await vvSupabase.storage
                 .from("videos")
                 .upload(
@@ -421,70 +385,64 @@ async function uploadVideo() {
                     }
                 );
 
-        if (uploadResult.error) {
-            throw uploadResult.error;
+        if (upload.error) {
+            throw upload.error;
         }
 
 
-        /* -------------------------------
-           GET PUBLIC VIDEO URL
-        -------------------------------- */
+        /* PUBLIC URL */
 
         const publicResult =
             vvSupabase.storage
                 .from("videos")
-                .getPublicUrl(
-                    filePath
-                );
+                .getPublicUrl(filePath);
 
-        const publicUrl =
+        const videoUrl =
             publicResult.data.publicUrl;
 
 
-        /* -------------------------------
-           SAVE VIDEO TO DATABASE
-        -------------------------------- */
+        /* DATABASE */
 
-        const databaseResult =
+        const database =
             await vvSupabase
                 .from("free_videos")
                 .insert({
                     title:
-                        title.value.trim()
-                })
-                .select();
+                        title.value.trim(),
 
-        if (databaseResult.error) {
+                    category:
+                        category.value.trim(),
 
-            console.error(
-                "Database Error:",
-                databaseResult.error
-            );
+                    country:
+                        country.value.trim(),
 
-            status.textContent =
-                "Storage uploaded, but database save failed: " +
-                databaseResult.error.message;
+                    description:
+                        description.value.trim(),
 
-            status.style.color =
-                "#ff6b6b";
+                    video_url:
+                        videoUrl,
 
-            return;
+                    storage_path:
+                        filePath,
+
+                    status:
+                        "published"
+                });
+
+        if (database.error) {
+
+            /* Remove uploaded file if database fails */
+
+            await vvSupabase.storage
+                .from("videos")
+                .remove([filePath]);
+
+            throw database.error;
         }
 
 
-        console.log(
-            "Video uploaded:",
-            publicUrl
-        );
-
-        console.log(
-            "Database record:",
-            databaseResult.data
-        );
-
-
         status.textContent =
-            "✓ Video uploaded and saved successfully.";
+            "✓ Video uploaded successfully!";
 
         status.style.color =
             "#55d98a";
@@ -499,6 +457,8 @@ async function uploadVideo() {
 
         await updateDashboardStats();
 
+        await loadVideos();
+
     } catch (error) {
 
         console.error(
@@ -508,316 +468,3 @@ async function uploadVideo() {
 
         status.textContent =
             "✕ Upload failed: " +
-            error.message;
-
-        status.style.color =
-            "#ff6b6b";
-    }
-}
-
-
-/* =========================================================
-   PHOTO UPLOAD
-========================================================= */
-
-async function uploadPhoto() {
-
-    const title =
-        document.getElementById("photoTitle");
-
-    const category =
-        document.getElementById("photoCategory");
-
-    const fileInput =
-        document.getElementById("photoFile");
-
-    const description =
-        document.getElementById(
-            "photoDescription"
-        );
-
-    const status =
-        document.getElementById(
-            "photoStatus"
-        );
-
-    if (!title ||
-        !category ||
-        !fileInput ||
-        !description ||
-        !status) {
-        return;
-    }
-
-    if (!title.value.trim()) {
-
-        status.textContent =
-            "Please enter a photo title.";
-
-        status.style.color =
-            "#ff6b6b";
-
-        return;
-    }
-
-    if (!fileInput.files ||
-        fileInput.files.length === 0) {
-
-        status.textContent =
-            "Please select a photo.";
-
-        status.style.color =
-            "#ff6b6b";
-
-        return;
-    }
-
-    const sessionResult =
-        await vvSupabase.auth.getSession();
-
-    if (!sessionResult.data.session) {
-
-        status.textContent =
-            "Please login as admin first.";
-
-        status.style.color =
-            "#ff6b6b";
-
-        return;
-    }
-
-    const file =
-        fileInput.files[0];
-
-    status.textContent =
-        "Uploading photo...";
-
-    status.style.color =
-        "#ffffff";
-
-    try {
-
-        const extension =
-            file.name.includes(".")
-                ? file.name.split(".").pop()
-                : "jpg";
-
-        const safeTitle =
-            title.value
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, "");
-
-        const fileName =
-            "photo-" +
-            Date.now() +
-            "-" +
-            safeTitle +
-            "." +
-            extension;
-
-        const filePath =
-            "photos/" + fileName;
-
-        const uploadResult =
-            await vvSupabase.storage
-                .from("videos")
-                .upload(
-                    filePath,
-                    file,
-                    {
-                        cacheControl: "3600",
-                        upsert: false,
-                        contentType: file.type
-                    }
-                );
-
-        if (uploadResult.error) {
-            throw uploadResult.error;
-        }
-
-        const publicResult =
-            vvSupabase.storage
-                .from("videos")
-                .getPublicUrl(
-                    filePath
-                );
-
-        console.log(
-            "Photo URL:",
-            publicResult.data.publicUrl
-        );
-
-        status.textContent =
-            "✓ Photo uploaded successfully.";
-
-        status.style.color =
-            "#55d98a";
-
-        title.value = "";
-        category.value = "";
-        description.value = "";
-        fileInput.value = "";
-
-    } catch (error) {
-
-        console.error(
-            "Photo Upload Error:",
-            error
-        );
-
-        status.textContent =
-            "✕ Upload failed: " +
-            error.message;
-
-        status.style.color =
-            "#ff6b6b";
-    }
-}
-
-
-/* =========================================================
-   ARTICLE
-========================================================= */
-
-function addArticle() {
-
-    const title =
-        document.getElementById("articleTitle");
-
-    const category =
-        document.getElementById("articleCategory");
-
-    const content =
-        document.getElementById("articleContent");
-
-    const status =
-        document.getElementById("articleStatus");
-
-    if (!title ||
-        !category ||
-        !content ||
-        !status) {
-        return;
-    }
-
-    if (!title.value.trim()) {
-
-        status.textContent =
-            "Please enter an article title.";
-
-        status.style.color =
-            "#ff6b6b";
-
-        return;
-    }
-
-    if (!category.value.trim()) {
-
-        status.textContent =
-            "Please enter an article category.";
-
-        status.style.color =
-            "#ff6b6b";
-
-        return;
-    }
-
-    if (!content.value.trim()) {
-
-        status.textContent =
-            "Please enter article content.";
-
-        status.style.color =
-            "#ff6b6b";
-
-        return;
-    }
-
-    status.textContent =
-        "✓ Article is ready.";
-
-    status.style.color =
-        "#55d98a";
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-async function updateDashboardStats() {
-
-    try {
-
-        const result =
-            await vvSupabase
-                .from("free_videos")
-                .select("*", {
-                    count: "exact",
-                    head: true
-                });
-
-        if (result.error) {
-
-            console.error(
-                "Dashboard Error:",
-                result.error
-            );
-
-            return;
-        }
-
-        const videoCount =
-            document.getElementById(
-                "videoCount"
-            );
-
-        if (videoCount) {
-
-            videoCount.textContent =
-                result.count || 0;
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Dashboard Error:",
-            error
-        );
-    }
-}
-
-
-/* =========================================================
-   PAGE START
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async function() {
-
-        const password =
-            document.getElementById(
-                "adminPassword"
-            );
-
-        if (password) {
-
-            password.addEventListener(
-                "keydown",
-                function(event) {
-
-                    if (event.key === "Enter") {
-                        adminLogin();
-                    }
-
-                }
-            );
-        }
-
-        await checkAdminSession();
-
-    }
-);
