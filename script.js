@@ -8,11 +8,6 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_LwynvmUuZwIMwNrScrusAQ_vkJzfIvo";
 
-
-/* =========================================================
-   CREATE SUPABASE CLIENT
-========================================================= */
-
 const vvSupabase =
     window.supabase.createClient(
         SUPABASE_URL,
@@ -32,8 +27,7 @@ function searchSite() {
 
     if (!input) return;
 
-    const query =
-        input.value.trim();
+    const query = input.value.trim();
 
     if (!query) {
         alert("Please enter a search term.");
@@ -69,13 +63,11 @@ async function adminLogin() {
     const adminPanel =
         document.getElementById("adminPanel");
 
-
     if (!emailElement ||
         !passwordElement ||
         !status) {
         return;
     }
-
 
     const email =
         emailElement.value.trim();
@@ -83,35 +75,27 @@ async function adminLogin() {
     const password =
         passwordElement.value;
 
-
     if (!email) {
         status.textContent =
             "Please enter admin email.";
-
         status.style.color =
             "#ff6b6b";
-
         return;
     }
-
 
     if (!password) {
         status.textContent =
             "Please enter admin password.";
-
         status.style.color =
             "#ff6b6b";
-
         return;
     }
-
 
     status.textContent =
         "Logging in...";
 
     status.style.color =
         "#ffffff";
-
 
     try {
 
@@ -121,11 +105,9 @@ async function adminLogin() {
                 password: password
             });
 
-
         if (result.error) {
             throw result.error;
         }
-
 
         if (!result.data ||
             !result.data.session) {
@@ -135,28 +117,23 @@ async function adminLogin() {
             );
         }
 
-
         status.textContent =
             "✓ Login successful";
 
         status.style.color =
             "#55d98a";
 
-
         if (loginSection) {
             loginSection.style.display =
                 "none";
         }
-
 
         if (adminPanel) {
             adminPanel.style.display =
                 "block";
         }
 
-
         await updateDashboardStats();
-
 
     } catch (error) {
 
@@ -164,7 +141,6 @@ async function adminLogin() {
             "Admin Login Error:",
             error
         );
-
 
         status.textContent =
             "✕ Login failed: " +
@@ -187,11 +163,9 @@ async function adminLogout() {
         const result =
             await vvSupabase.auth.signOut();
 
-
         if (result.error) {
             throw result.error;
         }
-
 
         const loginSection =
             document.getElementById(
@@ -203,18 +177,15 @@ async function adminLogout() {
                 "adminPanel"
             );
 
-
         if (loginSection) {
             loginSection.style.display =
                 "block";
         }
 
-
         if (adminPanel) {
             adminPanel.style.display =
                 "none";
         }
-
 
         const email =
             document.getElementById(
@@ -226,16 +197,13 @@ async function adminLogout() {
                 "adminPassword"
             );
 
-
         if (email) {
             email.value = "";
         }
 
-
         if (password) {
             password.value = "";
         }
-
 
     } catch (error) {
 
@@ -263,15 +231,12 @@ async function checkAdminSession() {
         const result =
             await vvSupabase.auth.getSession();
 
-
         if (result.error) {
             throw result.error;
         }
 
-
         const session =
             result.data.session;
-
 
         const loginSection =
             document.getElementById(
@@ -282,7 +247,6 @@ async function checkAdminSession() {
             document.getElementById(
                 "adminPanel"
             );
-
 
         if (session) {
 
@@ -310,7 +274,6 @@ async function checkAdminSession() {
                     "none";
             }
         }
-
 
     } catch (error) {
 
@@ -350,7 +313,6 @@ async function uploadVideo() {
             "videoStatus"
         );
 
-
     if (!title ||
         !category ||
         !country ||
@@ -359,7 +321,6 @@ async function uploadVideo() {
         !status) {
         return;
     }
-
 
     if (!title.value.trim()) {
 
@@ -372,7 +333,6 @@ async function uploadVideo() {
         return;
     }
 
-
     if (!category.value.trim()) {
 
         status.textContent =
@@ -383,7 +343,6 @@ async function uploadVideo() {
 
         return;
     }
-
 
     if (!fileInput.files ||
         fileInput.files.length === 0) {
@@ -397,10 +356,8 @@ async function uploadVideo() {
         return;
     }
 
-
     const sessionResult =
         await vvSupabase.auth.getSession();
-
 
     if (!sessionResult.data.session) {
 
@@ -413,17 +370,14 @@ async function uploadVideo() {
         return;
     }
 
-
     const file =
         fileInput.files[0];
-
 
     status.textContent =
         "Uploading video...";
 
     status.style.color =
         "#ffffff";
-
 
     try {
 
@@ -432,14 +386,12 @@ async function uploadVideo() {
                 ? file.name.split(".").pop()
                 : "mp4";
 
-
         const safeTitle =
             title.value
                 .trim()
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, "-")
                 .replace(/^-+|-+$/g, "");
-
 
         const fileName =
             Date.now() +
@@ -448,10 +400,13 @@ async function uploadVideo() {
             "." +
             extension;
 
-
         const filePath =
             "videos/" + fileName;
 
+
+        /* -------------------------------
+           UPLOAD TO STORAGE
+        -------------------------------- */
 
         const uploadResult =
             await vvSupabase.storage
@@ -466,11 +421,14 @@ async function uploadVideo() {
                     }
                 );
 
-
         if (uploadResult.error) {
             throw uploadResult.error;
         }
 
+
+        /* -------------------------------
+           GET PUBLIC VIDEO URL
+        -------------------------------- */
 
         const publicResult =
             vvSupabase.storage
@@ -479,9 +437,39 @@ async function uploadVideo() {
                     filePath
                 );
 
-
         const publicUrl =
             publicResult.data.publicUrl;
+
+
+        /* -------------------------------
+           SAVE VIDEO TO DATABASE
+        -------------------------------- */
+
+        const databaseResult =
+            await vvSupabase
+                .from("free_videos")
+                .insert({
+                    title:
+                        title.value.trim()
+                })
+                .select();
+
+        if (databaseResult.error) {
+
+            console.error(
+                "Database Error:",
+                databaseResult.error
+            );
+
+            status.textContent =
+                "Storage uploaded, but database save failed: " +
+                databaseResult.error.message;
+
+            status.style.color =
+                "#ff6b6b";
+
+            return;
+        }
 
 
         console.log(
@@ -489,33 +477,17 @@ async function uploadVideo() {
             publicUrl
         );
 
+        console.log(
+            "Database record:",
+            databaseResult.data
+        );
+
 
         status.textContent =
-            "✓ Video uploaded successfully.";
+            "✓ Video uploaded and saved successfully.";
 
         status.style.color =
             "#55d98a";
-
-
-        console.log({
-            title:
-                title.value.trim(),
-
-            category:
-                category.value.trim(),
-
-            country:
-                country.value.trim(),
-
-            description:
-                description.value.trim(),
-
-            video_url:
-                publicUrl,
-
-            storage_path:
-                filePath
-        });
 
 
         title.value = "";
@@ -527,14 +499,12 @@ async function uploadVideo() {
 
         await updateDashboardStats();
 
-
     } catch (error) {
 
         console.error(
             "Video Upload Error:",
             error
         );
-
 
         status.textContent =
             "✕ Upload failed: " +
@@ -553,19 +523,13 @@ async function uploadVideo() {
 async function uploadPhoto() {
 
     const title =
-        document.getElementById(
-            "photoTitle"
-        );
+        document.getElementById("photoTitle");
 
     const category =
-        document.getElementById(
-            "photoCategory"
-        );
+        document.getElementById("photoCategory");
 
     const fileInput =
-        document.getElementById(
-            "photoFile"
-        );
+        document.getElementById("photoFile");
 
     const description =
         document.getElementById(
@@ -577,7 +541,6 @@ async function uploadPhoto() {
             "photoStatus"
         );
 
-
     if (!title ||
         !category ||
         !fileInput ||
@@ -585,7 +548,6 @@ async function uploadPhoto() {
         !status) {
         return;
     }
-
 
     if (!title.value.trim()) {
 
@@ -597,7 +559,6 @@ async function uploadPhoto() {
 
         return;
     }
-
 
     if (!fileInput.files ||
         fileInput.files.length === 0) {
@@ -611,10 +572,8 @@ async function uploadPhoto() {
         return;
     }
 
-
     const sessionResult =
         await vvSupabase.auth.getSession();
-
 
     if (!sessionResult.data.session) {
 
@@ -627,17 +586,14 @@ async function uploadPhoto() {
         return;
     }
 
-
     const file =
         fileInput.files[0];
-
 
     status.textContent =
         "Uploading photo...";
 
     status.style.color =
         "#ffffff";
-
 
     try {
 
@@ -646,14 +602,12 @@ async function uploadPhoto() {
                 ? file.name.split(".").pop()
                 : "jpg";
 
-
         const safeTitle =
             title.value
                 .trim()
                 .toLowerCase()
                 .replace(/[^a-z0-9]+/g, "-")
                 .replace(/^-+|-+$/g, "");
-
 
         const fileName =
             "photo-" +
@@ -663,10 +617,8 @@ async function uploadPhoto() {
             "." +
             extension;
 
-
         const filePath =
             "photos/" + fileName;
-
 
         const uploadResult =
             await vvSupabase.storage
@@ -681,11 +633,9 @@ async function uploadPhoto() {
                     }
                 );
 
-
         if (uploadResult.error) {
             throw uploadResult.error;
         }
-
 
         const publicResult =
             vvSupabase.storage
@@ -694,12 +644,10 @@ async function uploadPhoto() {
                     filePath
                 );
 
-
         console.log(
             "Photo URL:",
             publicResult.data.publicUrl
         );
-
 
         status.textContent =
             "✓ Photo uploaded successfully.";
@@ -707,12 +655,10 @@ async function uploadPhoto() {
         status.style.color =
             "#55d98a";
 
-
         title.value = "";
         category.value = "";
         description.value = "";
         fileInput.value = "";
-
 
     } catch (error) {
 
@@ -720,7 +666,6 @@ async function uploadPhoto() {
             "Photo Upload Error:",
             error
         );
-
 
         status.textContent =
             "✕ Upload failed: " +
@@ -739,25 +684,16 @@ async function uploadPhoto() {
 function addArticle() {
 
     const title =
-        document.getElementById(
-            "articleTitle"
-        );
+        document.getElementById("articleTitle");
 
     const category =
-        document.getElementById(
-            "articleCategory"
-        );
+        document.getElementById("articleCategory");
 
     const content =
-        document.getElementById(
-            "articleContent"
-        );
+        document.getElementById("articleContent");
 
     const status =
-        document.getElementById(
-            "articleStatus"
-        );
-
+        document.getElementById("articleStatus");
 
     if (!title ||
         !category ||
@@ -765,7 +701,6 @@ function addArticle() {
         !status) {
         return;
     }
-
 
     if (!title.value.trim()) {
 
@@ -778,7 +713,6 @@ function addArticle() {
         return;
     }
 
-
     if (!category.value.trim()) {
 
         status.textContent =
@@ -790,7 +724,6 @@ function addArticle() {
         return;
     }
 
-
     if (!content.value.trim()) {
 
         status.textContent =
@@ -801,7 +734,6 @@ function addArticle() {
 
         return;
     }
-
 
     status.textContent =
         "✓ Article is ready.";
@@ -827,7 +759,6 @@ async function updateDashboardStats() {
                     head: true
                 });
 
-
         if (result.error) {
 
             console.error(
@@ -838,19 +769,16 @@ async function updateDashboardStats() {
             return;
         }
 
-
         const videoCount =
             document.getElementById(
                 "videoCount"
             );
-
 
         if (videoCount) {
 
             videoCount.textContent =
                 result.count || 0;
         }
-
 
     } catch (error) {
 
@@ -875,7 +803,6 @@ document.addEventListener(
                 "adminPassword"
             );
 
-
         if (password) {
 
             password.addEventListener(
@@ -889,7 +816,6 @@ document.addEventListener(
                 }
             );
         }
-
 
         await checkAdminSession();
 
