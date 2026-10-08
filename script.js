@@ -11,11 +11,30 @@ const SUPABASE_KEY =
 const ADMIN_UID =
     "d7a94992-6a9f-40fe-a923-280af7da0cf2";
 
-const vvSupabase =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
+
+/* =========================================================
+   SUPABASE INITIALIZATION
+========================================================= */
+
+let vvSupabase = null;
+
+if (
+    window.supabase &&
+    typeof window.supabase.createClient === "function"
+) {
+
+    vvSupabase =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+} else {
+
+    console.error(
+        "Supabase library load nahi hui."
     );
+}
 
 
 /* =========================================================
@@ -23,12 +42,39 @@ const vvSupabase =
 ========================================================= */
 
 function escapeHtml(value) {
+
     return String(value || "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   SUPABASE CHECK
+========================================================= */
+
+function requireSupabase() {
+
+    if (vvSupabase) {
+        return true;
+    }
+
+    const status =
+        document.getElementById("loginStatus");
+
+    if (status) {
+
+        status.textContent =
+            "✕ Supabase load nahi hui. Page refresh karein.";
+
+        status.style.color =
+            "#ff6b6b";
+    }
+
+    return false;
 }
 
 
@@ -73,6 +119,7 @@ async function adminLogin() {
     const adminPanel =
         document.getElementById("adminPanel");
 
+
     if (!emailElement ||
         !passwordElement ||
         !status) {
@@ -84,11 +131,18 @@ async function adminLogin() {
         return;
     }
 
+
+    if (!requireSupabase()) {
+        return;
+    }
+
+
     const email =
         emailElement.value.trim();
 
     const password =
         passwordElement.value;
+
 
     if (!email) {
 
@@ -101,6 +155,7 @@ async function adminLogin() {
         return;
     }
 
+
     if (!password) {
 
         status.textContent =
@@ -112,11 +167,13 @@ async function adminLogin() {
         return;
     }
 
+
     status.textContent =
         "Logging in...";
 
     status.style.color =
         "#ffffff";
+
 
     try {
 
@@ -126,9 +183,11 @@ async function adminLogin() {
                 password: password
             });
 
+
         if (result.error) {
             throw result.error;
         }
+
 
         if (!result.data ||
             !result.data.user) {
@@ -138,9 +197,6 @@ async function adminLogin() {
             );
         }
 
-        /*
-         * Sirf hamara admin account allowed hai.
-         */
 
         if (
             result.data.user.id !==
@@ -154,23 +210,30 @@ async function adminLogin() {
             );
         }
 
+
         status.textContent =
             "✓ Login successful";
 
         status.style.color =
             "#55d98a";
 
+
         if (loginSection) {
+
             loginSection.style.display =
                 "none";
         }
 
+
         if (adminPanel) {
+
             adminPanel.style.display =
                 "block";
         }
 
+
         await updateDashboardStats();
+
 
     } catch (error) {
 
@@ -181,18 +244,14 @@ async function adminLogin() {
 
         status.textContent =
             "✕ Login failed: " +
-            (error.message || "Unknown error");
+            (error.message ||
+                "Unknown error");
 
         status.style.color =
             "#ff6b6b";
     }
 }
 
-
-/*
- * IMPORTANT:
- * HTML ke onclick="adminLogin()" ke liye
- */
 
 window.adminLogin = adminLogin;
 
@@ -203,14 +262,20 @@ window.adminLogin = adminLogin;
 
 async function adminLogout() {
 
+    if (!requireSupabase()) {
+        return;
+    }
+
     try {
 
         const result =
             await vvSupabase.auth.signOut();
 
+
         if (result.error) {
             throw result.error;
         }
+
 
         const loginSection =
             document.getElementById(
@@ -222,25 +287,33 @@ async function adminLogout() {
                 "adminPanel"
             );
 
+
         if (loginSection) {
+
             loginSection.style.display =
                 "block";
         }
 
+
         if (adminPanel) {
+
             adminPanel.style.display =
                 "none";
         }
+
 
         const status =
             document.getElementById(
                 "loginStatus"
             );
 
+
         if (status) {
+
             status.textContent =
                 "Logged out.";
         }
+
 
     } catch (error) {
 
@@ -251,6 +324,7 @@ async function adminLogout() {
     }
 }
 
+
 window.adminLogout = adminLogout;
 
 
@@ -260,17 +334,25 @@ window.adminLogout = adminLogout;
 
 async function checkAdminSession() {
 
+    if (!vvSupabase) {
+        return;
+    }
+
+
     try {
 
         const result =
             await vvSupabase.auth.getSession();
 
+
         if (result.error) {
             throw result.error;
         }
 
+
         const session =
             result.data.session;
+
 
         const loginSection =
             document.getElementById(
@@ -282,6 +364,7 @@ async function checkAdminSession() {
                 "adminPanel"
             );
 
+
         if (
             session &&
             session.user &&
@@ -289,27 +372,33 @@ async function checkAdminSession() {
         ) {
 
             if (loginSection) {
+
                 loginSection.style.display =
                     "none";
             }
 
             if (adminPanel) {
+
                 adminPanel.style.display =
                     "block";
             }
+
 
         } else {
 
             if (loginSection) {
+
                 loginSection.style.display =
                     "block";
             }
 
             if (adminPanel) {
+
                 adminPanel.style.display =
                     "none";
             }
         }
+
 
     } catch (error) {
 
@@ -326,6 +415,11 @@ async function checkAdminSession() {
 ========================================================= */
 
 async function uploadVideo() {
+
+    if (!requireSupabase()) {
+        return;
+    }
+
 
     const title =
         document.getElementById("videoTitle");
@@ -349,6 +443,7 @@ async function uploadVideo() {
             "videoStatus"
         );
 
+
     if (!title ||
         !category ||
         !country ||
@@ -363,6 +458,7 @@ async function uploadVideo() {
         return;
     }
 
+
     if (!title.value.trim()) {
 
         status.textContent =
@@ -370,6 +466,7 @@ async function uploadVideo() {
 
         return;
     }
+
 
     if (!category.value.trim()) {
 
@@ -379,6 +476,7 @@ async function uploadVideo() {
         return;
     }
 
+
     if (!fileInput.files.length) {
 
         status.textContent =
@@ -387,34 +485,45 @@ async function uploadVideo() {
         return;
     }
 
-    const sessionResult =
-        await vvSupabase.auth.getSession();
-
-    const session =
-        sessionResult.data.session;
-
-    if (
-        !session ||
-        !session.user ||
-        session.user.id !== ADMIN_UID
-    ) {
-
-        status.textContent =
-            "Please login as admin first.";
-
-        return;
-    }
-
-    const file =
-        fileInput.files[0];
-
-    status.textContent =
-        "Uploading video...";
-
-    status.style.color =
-        "#ffffff";
 
     try {
+
+        const sessionResult =
+            await vvSupabase.auth.getSession();
+
+
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+
+
+        const session =
+            sessionResult.data.session;
+
+
+        if (
+            !session ||
+            !session.user ||
+            session.user.id !== ADMIN_UID
+        ) {
+
+            status.textContent =
+                "Please login as admin first.";
+
+            return;
+        }
+
+
+        const file =
+            fileInput.files[0];
+
+
+        status.textContent =
+            "Uploading video...";
+
+        status.style.color =
+            "#ffffff";
+
 
         const extension =
             file.name.includes(".")
@@ -423,6 +532,7 @@ async function uploadVideo() {
                     .pop()
                     .toLowerCase()
                 : "mp4";
+
 
         const safeTitle =
             title.value
@@ -437,12 +547,14 @@ async function uploadVideo() {
                     ""
                 );
 
+
         const fileName =
             Date.now() +
             "-" +
             (safeTitle || "video") +
             "." +
             extension;
+
 
         const filePath =
             "videos/" + fileName;
@@ -467,6 +579,7 @@ async function uploadVideo() {
                     }
                 );
 
+
         if (upload.error) {
             throw upload.error;
         }
@@ -483,6 +596,7 @@ async function uploadVideo() {
                     filePath
                 );
 
+
         if (
             !publicResult.data ||
             !publicResult.data.publicUrl
@@ -492,6 +606,7 @@ async function uploadVideo() {
                 "Video public URL nahi bana."
             );
         }
+
 
         const videoUrl =
             publicResult.data.publicUrl;
@@ -505,6 +620,7 @@ async function uploadVideo() {
             await vvSupabase
                 .from("free_videos")
                 .insert({
+
                     title:
                         title.value.trim(),
 
@@ -527,12 +643,8 @@ async function uploadVideo() {
                         "published"
                 });
 
-        if (database.error) {
 
-            /*
-             * Database fail ho to
-             * uploaded file remove.
-             */
+        if (database.error) {
 
             await vvSupabase.storage
                 .from("videos")
@@ -554,14 +666,17 @@ async function uploadVideo() {
         status.style.color =
             "#55d98a";
 
+
         title.value = "";
         category.value = "";
         country.value = "";
         description.value = "";
         fileInput.value = "";
 
+
         await loadVideos();
         await updateDashboardStats();
+
 
     } catch (error) {
 
@@ -572,13 +687,16 @@ async function uploadVideo() {
 
         status.textContent =
             "✕ Upload failed: " +
-            (error.message ||
-                "Unknown error");
+            (
+                error.message ||
+                "Unknown error"
+            );
 
         status.style.color =
             "#ff6b6b";
     }
 }
+
 
 window.uploadVideo = uploadVideo;
 
@@ -594,12 +712,25 @@ async function loadVideos(searchQuery = "") {
             "videoList"
         );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!vvSupabase) {
+
+        container.innerHTML =
+            "<p>Supabase load nahi hui.</p>";
+
+        return;
+    }
+
 
     try {
 
-        let query =
-            vvSupabase
+        const result =
+            await vvSupabase
                 .from("free_videos")
                 .select(
                     "id,title,category,country,description,video_url,created_at"
@@ -615,15 +746,15 @@ async function loadVideos(searchQuery = "") {
                     }
                 );
 
-        const result =
-            await query;
 
         if (result.error) {
             throw result.error;
         }
 
+
         let videos =
             result.data || [];
+
 
         if (searchQuery) {
 
@@ -642,12 +773,14 @@ async function loadVideos(searchQuery = "") {
                                 (video.description || "")
                             ).toLowerCase();
 
+
                         return text.includes(
                             searchQuery
                         );
                     }
                 );
         }
+
 
         if (!videos.length) {
 
@@ -656,6 +789,7 @@ async function loadVideos(searchQuery = "") {
 
             return;
         }
+
 
         container.innerHTML =
             videos.map(
@@ -672,7 +806,6 @@ async function loadVideos(searchQuery = "") {
                             src="${escapeHtml(
                                 video.video_url
                             )}"
-                            type="video/mp4"
                         >
                         Your browser does not
                         support video playback.
@@ -710,6 +843,7 @@ async function loadVideos(searchQuery = "") {
             `
             ).join("");
 
+
     } catch (error) {
 
         console.error(
@@ -729,6 +863,11 @@ async function loadVideos(searchQuery = "") {
 
 async function updateDashboardStats() {
 
+    if (!vvSupabase) {
+        return;
+    }
+
+
     try {
 
         const result =
@@ -742,10 +881,12 @@ async function updateDashboardStats() {
                     }
                 );
 
+
         const videoCount =
             document.getElementById(
                 "videoCount"
             );
+
 
         if (videoCount) {
 
@@ -757,13 +898,6 @@ async function updateDashboardStats() {
                     );
         }
 
-        /*
-         * free_photos aur articles tables
-         * abhi zaroori nahi hain.
-         *
-         * Isliye unko query nahi kar rahe,
-         * taake login/video system break na ho.
-         */
 
         const photoCount =
             document.getElementById(
@@ -775,15 +909,20 @@ async function updateDashboardStats() {
                 "articleCount"
             );
 
+
         if (photoCount) {
+
             photoCount.textContent =
                 "0";
         }
 
+
         if (articleCount) {
+
             articleCount.textContent =
                 "0";
         }
+
 
     } catch (error) {
 
@@ -796,10 +935,7 @@ async function updateDashboardStats() {
 
 
 /* =========================================================
-   PLACEHOLDER PHOTO / ARTICLE FUNCTIONS
-   =========================================================
-   Ye functions isliye hain taake agar HTML mein
-   buttons maujood hon to JavaScript error na aaye.
+   PHOTO / ARTICLE PLACEHOLDERS
 ========================================================= */
 
 async function uploadPhoto() {
