@@ -1,1 +1,1 @@
-function searchSite(){const q=document.getElementById('search').value.trim();if(!q){alert('Please enter a search term.');return}alert('Search demo: '+q+'\nA real database search will be connected with the backend.');}
+function searchSite(){const q=document.getElementById('search').value.trim();if(!q){alert('Please enter a search term.');return}alert('You searched for: '+q)}function showMessage(m){alert(m)}function goHome(){window.location.href='index.html'}function openVideo(url){if(url)window.open(url,'_blank');else alert('Video link is not available.')}
