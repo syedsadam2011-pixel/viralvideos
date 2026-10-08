@@ -1,0 +1,1 @@
+function searchSite(){const q=document.getElementById('search').value.trim();if(!q){alert('Please enter a search term.');return}alert('Search demo: '+q+'\nA real database search will be connected with the backend.');}
