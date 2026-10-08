@@ -200,7 +200,6 @@
                         placeholder="Enter video title"
                     >
 
-
                     <label for="videoCategory">
                         Category
                     </label>
@@ -210,7 +209,6 @@
                         id="videoCategory"
                         placeholder="Example: Funny"
                     >
-
 
                     <label for="videoCountry">
                         Country
@@ -222,7 +220,6 @@
                         placeholder="Example: Pakistan"
                     >
 
-
                     <label for="videoFile">
                         Video File
                     </label>
@@ -233,7 +230,6 @@
                         accept="video/*"
                     >
 
-
                     <label for="videoDescription">
                         Description
                     </label>
@@ -242,7 +238,6 @@
                         id="videoDescription"
                         placeholder="Enter video description"
                     ></textarea>
-
 
                     <button
                         type="button"
@@ -271,7 +266,6 @@
                         placeholder="Enter photo title"
                     >
 
-
                     <label for="photoCategory">
                         Category
                     </label>
@@ -281,7 +275,6 @@
                         id="photoCategory"
                         placeholder="Example: Viral"
                     >
-
 
                     <label for="photoFile">
                         Photo File
@@ -293,7 +286,6 @@
                         accept="image/*"
                     >
 
-
                     <label for="photoDescription">
                         Description
                     </label>
@@ -302,7 +294,6 @@
                         id="photoDescription"
                         placeholder="Enter photo description"
                     ></textarea>
-
 
                     <button
                         type="button"
@@ -331,7 +322,6 @@
                         placeholder="Enter article title"
                     >
 
-
                     <label for="articleCategory">
                         Category
                     </label>
@@ -342,7 +332,6 @@
                         placeholder="Example: News"
                     >
 
-
                     <label for="articleContent">
                         Article Content
                     </label>
@@ -352,7 +341,6 @@
                         rows="8"
                         placeholder="Write article..."
                     ></textarea>
-
 
                     <button
                         type="button"
@@ -384,10 +372,11 @@
 
     <!-- ================= SUPABASE ================= -->
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Explicit browser/UMD build -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-    <!-- YOUR JAVASCRIPT -->
-    <script src="script.js"></script>
+    <!-- Your JavaScript -->
+    <script src="script.js?v=3"></script>
 
 </body>
-                          </html>
+    </html>
