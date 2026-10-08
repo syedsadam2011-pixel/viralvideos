@@ -1,742 +1,509 @@
+/* =========================================================
+   VIRALVIDEOS - MAIN STYLE
+========================================================= */
+
 * {
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  background: #080b12;
-  color: #f5f7fb;
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0b0f19;
+    color: #ffffff;
+    line-height: 1.6;
 }
 
-button,
-input,
-textarea,
-select {
-  font-family: inherit;
-}
 
-button {
-  cursor: pointer;
-}
+/* =========================================================
+   HEADER
+========================================================= */
 
-/* ==================== HEADER ==================== */
-
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: #0d111bcc;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #222838;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  padding: 18px 6%;
+header {
+    width: 100%;
+    background: #111827;
+    border-bottom: 1px solid #263044;
+    padding: 16px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
-  font-size: 25px;
-  font-weight: 800;
-  color: #fff;
-  text-decoration: none;
-  white-space: nowrap;
+    font-size: 26px;
+    font-weight: 800;
+    color: #ff3158;
 }
 
-.logo span {
-  color: #7c5cff;
+nav {
+    display: flex;
+    align-items: center;
+    gap: 22px;
 }
 
-.header nav {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.2s;
 }
 
-.header nav a {
-  color: #cbd2df;
-  text-decoration: none;
-  transition: 0.2s;
-}
-
-.header nav a:hover {
-  color: #fff;
+nav a:hover {
+    color: #ff3158;
 }
 
 
-/* ==================== HERO ==================== */
+/* =========================================================
+   HERO
+========================================================= */
+
+#home {
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 70px 20px;
+    background:
+        radial-gradient(
+            circle at top,
+            #252d46 0%,
+            #0b0f19 55%
+        );
+}
 
 .hero {
-  min-height: 470px;
-
-  display: flex;
-  align-items: center;
-
-  padding: 90px 7%;
-
-  background:
-    radial-gradient(
-      circle at 75% 30%,
-      #392477 0,
-      #11162a 35%,
-      #080b12 70%
-    );
-}
-
-.hero > div {
-  max-width: 850px;
-}
-
-.tag {
-  color: #9c88ff;
-  font-weight: 700;
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
 }
 
 .hero h1 {
-  font-size: clamp(42px, 7vw, 78px);
-  line-height: 1.05;
-  margin: 15px 0;
-}
-
-.hero h1 span {
-  color: #8b72ff;
+    font-size: 64px;
+    font-weight: 900;
+    margin-bottom: 12px;
 }
 
 .hero p {
-  color: #b9c1d0;
-  font-size: 18px;
+    color: #b8c0d4;
+    font-size: 19px;
+    margin-bottom: 30px;
 }
 
 
-/* ==================== SEARCH ==================== */
+/* =========================================================
+   SEARCH
+========================================================= */
 
-.search {
-  display: flex;
-  max-width: 680px;
-  margin-top: 28px;
-
-  background: #121724;
-  border: 1px solid #30384c;
-  border-radius: 14px;
-  padding: 7px;
+.search-box {
+    width: 100%;
+    max-width: 650px;
+    margin: auto;
+    display: flex;
+    gap: 10px;
 }
 
-.search input {
-  flex: 1;
-
-  min-width: 0;
-
-  background: none;
-  border: 0;
-  outline: 0;
-
-  color: white;
-  padding: 14px;
-
-  font-size: 16px;
+.search-box input {
+    flex: 1;
+    min-width: 0;
 }
 
-.search button,
-.premium button,
-.creator button,
-.admin-card button,
-.admin-form button,
-.admin-login button {
-  border: 0;
-  border-radius: 10px;
-
-  background: #7c5cff;
-  color: white;
-
-  padding: 13px 20px;
-
-  font-weight: 700;
-
-  transition: 0.2s;
+input,
+textarea {
+    width: 100%;
+    background: #151c2b;
+    color: #ffffff;
+    border: 1px solid #303a50;
+    border-radius: 8px;
+    padding: 13px 14px;
+    outline: none;
+    font-size: 15px;
 }
 
-.search button:hover,
-.premium button:hover,
-.creator button:hover,
-.admin-card button:hover,
-.admin-form button:hover,
-.admin-login button:hover {
-  opacity: 0.85;
-  transform: translateY(-1px);
+input:focus,
+textarea:focus {
+    border-color: #ff3158;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 110px;
 }
 
 
-/* ==================== SECTIONS ==================== */
+/* =========================================================
+   BUTTONS
+========================================================= */
 
-.section {
-  padding: 55px 7%;
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    background: #ff3158;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.section h2 {
-  font-size: 30px;
+button:hover {
+    background: #e51f46;
+    transform: translateY(-1px);
 }
 
-
-/* ==================== GRID ==================== */
-
-.grid,
-.cards,
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.grid article,
-.cards div,
-.gallery div {
-  background: #111722;
-  border: 1px solid #252d3d;
-  border-radius: 16px;
-  padding: 20px;
+button:active {
+    transform: translateY(0);
 }
 
 
-/* ==================== THUMB ==================== */
+/* =========================================================
+   GENERAL SECTIONS
+========================================================= */
 
-.thumb {
-  height: 170px;
-
-  border-radius: 12px;
-
-  background: #1c2333;
-
-  display: grid;
-  place-items: center;
-
-  font-size: 50px;
+section {
+    padding: 70px 20px;
 }
 
-.grid h3 {
-  margin-bottom: 5px;
+.container {
+    width: 100%;
+    max-width: 1150px;
+    margin: auto;
 }
 
-.grid p {
-  color: #8f9aab;
+section h2 {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 35px;
 }
 
 
-/* ==================== CHIPS ==================== */
+/* =========================================================
+   VIDEO / PHOTO / ARTICLE LIST
+========================================================= */
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.chips span {
-  background: #141b29;
-  border: 1px solid #2a3447;
-
-  border-radius: 30px;
-
-  padding: 10px 16px;
-
-  color: #dbe1eb;
-}
-
-.countries {
-  font-size: 16px;
-  color: #cbd3df;
-  word-spacing: 12px;
+#videoList,
+#photoList,
+#articleList {
+    width: 100%;
+    min-height: 120px;
+    background: #111827;
+    border: 1px solid #263044;
+    border-radius: 12px;
+    padding: 25px;
+    color: #9da7bc;
 }
 
 
-/* ==================== GALLERY ==================== */
+/* =========================================================
+   ADMIN SECTION
+========================================================= */
 
-.gallery {
-  grid-template-columns: repeat(4, 1fr);
+#admin {
+    background: #080c14;
 }
 
-.gallery div {
-  min-height: 140px;
-
-  display: flex;
-  align-items: end;
-
-  gap: 5px;
-
-  font-size: 18px;
+.admin-section {
+    width: 100%;
+    max-width: 1150px;
+    margin: auto;
 }
 
 
-/* ==================== PREMIUM ==================== */
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
 
-.premium,
-.creator {
-  margin: 20px 7% 55px;
-
-  padding: 40px;
-
-  border: 1px solid #30384c;
-  border-radius: 20px;
-
-  background: #111827;
+.admin-login-box {
+    width: 100%;
+    max-width: 430px;
+    margin: auto;
+    padding: 35px;
+    background: #111827;
+    border: 1px solid #303a50;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
-.premium {
-  background:
-    linear-gradient(
-      120deg,
-      #17172d,
-      #111827
-    );
+.admin-login-box h2 {
+    text-align: center;
+    margin-bottom: 10px;
 }
 
-
-/* ========================================================= */
-/* ==================== ADMIN PANEL ======================== */
-/* ========================================================= */
-
-.admin {
-  background: #0a0e17;
-  border-top: 1px solid #20283a;
-  border-bottom: 1px solid #20283a;
+.admin-login-box p {
+    color: #9da7bc;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.admin > h2 {
-  margin-bottom: 8px;
+.admin-login-box input {
+    margin-bottom: 14px;
 }
 
-.admin > p {
-  color: #9da8ba;
+.admin-login-box button {
+    width: 100%;
 }
 
 
-/* ==================== ADMIN LOGIN ==================== */
-
-.admin-login {
-  max-width: 500px;
-
-  margin: 30px 0;
-
-  padding: 25px;
-
-  background: #111722;
-
-  border: 1px solid #293246;
-
-  border-radius: 16px;
-}
-
-.admin-login h3 {
-  margin-top: 0;
-  font-size: 22px;
-}
-
-.admin-login label,
-.admin-form label {
-  display: block;
-
-  margin: 16px 0 7px;
-
-  color: #cbd3df;
-
-  font-weight: 600;
-}
-
-.admin-login input,
-.admin-form input,
-.admin-form select,
-.admin-form textarea {
-  width: 100%;
-
-  background: #0b101a;
-
-  border: 1px solid #303a50;
-
-  border-radius: 10px;
-
-  color: #fff;
-
-  padding: 13px 14px;
-
-  outline: none;
-
-  font-size: 15px;
-}
-
-.admin-login input:focus,
-.admin-form input:focus,
-.admin-form select:focus,
-.admin-form textarea:focus {
-  border-color: #7c5cff;
-}
-
-.admin-login button {
-  margin-top: 18px;
-}
-
-#loginStatus {
-  color: #9c88ff;
-}
-
-
-/* ==================== ADMIN PANEL ==================== */
+/* =========================================================
+   ADMIN PANEL
+========================================================= */
 
 .admin-panel {
-  margin-top: 35px;
+    width: 100%;
+}
+
+.admin-header {
+    background: #111827;
+    border: 1px solid #263044;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-header h2 {
+    text-align: left;
+    margin-bottom: 3px;
+}
+
+.admin-header p {
+    color: #9da7bc;
 }
 
 
-/* ==================== DASHBOARD ==================== */
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
-.admin-dashboard {
-  display: grid;
-
-  grid-template-columns:
-    repeat(6, 1fr);
-
-  gap: 15px;
-
-  margin: 25px 0 35px;
+.dashboard {
+    margin-bottom: 30px;
 }
 
-.admin-stat {
-  background: #111722;
-
-  border: 1px solid #293246;
-
-  border-radius: 15px;
-
-  padding: 20px;
-
-  text-align: center;
+.dashboard h3 {
+    font-size: 24px;
+    margin-bottom: 18px;
 }
 
-.admin-stat strong {
-  display: block;
-
-  font-size: 30px;
-
-  color: #a995ff;
-
-  margin-bottom: 5px;
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
 }
 
-.admin-stat span {
-  display: block;
+.dashboard-card {
+    background: #111827;
+    border: 1px solid #263044;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+}
 
-  color: #9da8ba;
+.dashboard-card h4 {
+    color: #9da7bc;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
 
-  font-size: 14px;
+.dashboard-card span {
+    display: block;
+    font-size: 34px;
+    font-weight: 800;
+    color: #ff3158;
 }
 
 
-/* ==================== ADMIN GRID ==================== */
+/* =========================================================
+   ADMIN BOX
+========================================================= */
 
-.admin-grid {
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 18px;
-
-  margin-bottom: 35px;
+.admin-box {
+    background: #111827;
+    border: 1px solid #263044;
+    border-radius: 14px;
+    padding: 30px;
+    margin-bottom: 25px;
 }
 
-.admin-card {
-  background: #111722;
-
-  border: 1px solid #293246;
-
-  border-radius: 16px;
-
-  padding: 22px;
-
-  transition: 0.2s;
+.admin-box h3 {
+    font-size: 23px;
+    margin-bottom: 22px;
 }
 
-.admin-card:hover {
-  border-color: #4a5670;
-
-  transform: translateY(-2px);
+.admin-box label {
+    display: block;
+    margin: 15px 0 7px;
+    color: #d7dbea;
+    font-size: 14px;
+    font-weight: 600;
 }
 
-.admin-card h3 {
-  margin-top: 0;
-
-  margin-bottom: 8px;
-
-  font-size: 19px;
+.admin-box button {
+    margin-top: 18px;
 }
 
-.admin-card p {
-  min-height: 45px;
-
-  color: #929daf;
-
-  font-size: 14px;
-}
-
-.admin-card button {
-  width: 100%;
+.admin-box p {
+    margin-top: 12px;
 }
 
 
-/* ==================== ADMIN FORMS ==================== */
+/* =========================================================
+   FILE INPUT
+========================================================= */
 
-.admin-form {
-  display: none;
-
-  margin: 25px 0;
-
-  padding: 30px;
-
-  background: #111722;
-
-  border: 1px solid #303a50;
-
-  border-radius: 18px;
+input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
 }
 
-.admin-form.active {
-  display: block;
-}
-
-.admin-form h2 {
-  margin-top: 0;
-}
-
-.admin-form textarea {
-  resize: vertical;
-
-  min-height: 120px;
-}
-
-.admin-form button {
-  margin-top: 20px;
-}
-
-.admin-form p {
-  color: #9c88ff;
+input[type="file"]::file-selector-button {
+    background: #252d40;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 12px;
+    margin-right: 10px;
+    cursor: pointer;
 }
 
 
-/* ==================== ADMIN MANAGER ==================== */
+/* =========================================================
+   STATUS
+========================================================= */
 
-.admin-manager {
-  margin-top: 25px;
-
-  padding: 30px;
-
-  background: #111722;
-
-  border: 1px solid #293246;
-
-  border-radius: 18px;
-}
-
-.admin-manager h2 {
-  margin-top: 0;
-}
-
-.admin-manager p {
-  color: #9da8ba;
-}
-
-#managerContent {
-  margin-top: 20px;
+#loginStatus,
+#videoStatus,
+#photoStatus,
+#articleStatus {
+    min-height: 24px;
+    font-size: 14px;
 }
 
 
-/* ==================== FOOTER ==================== */
+/* =========================================================
+   FOOTER
+========================================================= */
 
 footer {
-  padding: 40px 7%;
-
-  border-top: 1px solid #222838;
-
-  color: #8f99aa;
+    padding: 30px 20px;
+    text-align: center;
+    background: #070a11;
+    border-top: 1px solid #20283a;
 }
 
-footer strong {
-  color: #fff;
-}
-
-
-/* ========================================================= */
-/* ==================== TABLET ============================= */
-/* ========================================================= */
-
-@media (max-width: 1100px) {
-
-  .admin-dashboard {
-    grid-template-columns:
-      repeat(3, 1fr);
-  }
-
-  .admin-grid {
-    grid-template-columns:
-      repeat(3, 1fr);
-  }
-
-}
-
-
-/* ========================================================= */
-/* ==================== MOBILE ============================= */
-/* ========================================================= */
-
-@media (max-width: 800px) {
-
-  .header {
-    padding: 15px 5%;
-
-    flex-direction: column;
-
-    gap: 15px;
-  }
-
-  .header nav {
-    justify-content: center;
-
-    gap: 12px;
-
+footer p {
+    color: #7f899e;
     font-size: 14px;
-  }
-
-
-  .hero {
-    min-height: 430px;
-
-    padding: 65px 6%;
-  }
-
-  .hero h1 {
-    font-size: 48px;
-  }
-
-
-  .section {
-    padding: 40px 6%;
-  }
-
-
-  .grid,
-  .cards,
-  .gallery {
-    grid-template-columns: 1fr;
-  }
-
-
-  .gallery div {
-    min-height: 120px;
-  }
-
-
-  .premium,
-  .creator {
-    margin: 15px 6% 40px;
-
-    padding: 30px;
-  }
-
-
-  .admin-dashboard {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-
-  .admin-grid {
-    grid-template-columns:
-      repeat(2, 1fr);
-  }
-
-
-  .admin-form,
-  .admin-manager,
-  .admin-login {
-    padding: 20px;
-  }
-
 }
 
 
-/* ========================================================= */
-/* ==================== SMALL PHONE ======================== */
-/* ========================================================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
-@media (max-width: 500px) {
+@media (max-width: 768px) {
 
-  .logo {
-    font-size: 22px;
-  }
-
-  .header nav {
-    gap: 9px;
-
-    font-size: 12px;
-  }
-
-
-  .hero h1 {
-    font-size: 40px;
-  }
-
-  .hero p {
-    font-size: 16px;
-  }
-
-
-  .search {
-    flex-direction: column;
-
-    background: transparent;
-
-    border: 0;
-
-    padding: 0;
-  }
-
-  .search input {
-    background: #121724;
-
-    border: 1px solid #30384c;
-
-    border-radius: 10px;
-
-    margin-bottom: 10px;
-  }
-
-  .search button {
-    width: 100%;
-  }
-
-
-  .admin-dashboard {
-    grid-template-columns: 1fr;
-  }
-
-
-  .admin-grid {
-    grid-template-columns: 1fr;
-  }
-
-
-  .admin-stat strong {
-    font-size: 26px;
-  }
-
-
-  .premium,
-  .creator {
-    padding: 25px;
-  }
-
+    header {
+        padding: 14px 18px;
+        flex-direction: column;
+        gap: 12px;
     }
+
+    nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px 16px;
+    }
+
+    nav a {
+        font-size: 13px;
+    }
+
+    .hero h1 {
+        font-size: 43px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+
+    section {
+        padding: 50px 15px;
+    }
+
+    section h2 {
+        font-size: 27px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .admin-header h2 {
+        text-align: center;
+    }
+
+    .admin-header button {
+        width: 100%;
+    }
+
+    .admin-login-box,
+    .admin-box {
+        padding: 22px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .admin-box h3 {
+        font-size: 20px;
+    }
+
+    button {
+        width: 100%;
+    }
+  }
