@@ -1,792 +1,393 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="description"
-    content="ViralVideos - trending viral videos, photos, celebrity stories and creators."
-  >
+    <title>ViralVideos</title>
 
-  <title>ViralVideos — Trending Now</title>
-
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- ==================== HEADER ==================== -->
+    <!-- ================= HEADER ================= -->
+    <header>
+        <div class="logo">
+            ViralVideos
+        </div>
 
-  <header class="header">
-
-    <a class="logo" href="#">
-      Viral<span>Videos</span>
-    </a>
-
-    <nav>
-      <a href="#trending">Trending</a>
-      <a href="#videos">Videos</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#stars">Stars</a>
-      <a href="#countries">Countries</a>
-      <a href="#premium">Premium</a>
-      <a href="#admin">Admin</a>
-    </nav>
-
-  </header>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#videos">Videos</a>
+            <a href="#photos">Photos</a>
+            <a href="#articles">Articles</a>
+            <a href="#admin">Admin</a>
+        </nav>
+    </header>
 
 
-  <main>
+    <!-- ================= HOME ================= -->
+    <section id="home">
+        <div class="hero">
+            <h1>ViralVideos</h1>
+            <p>Latest Viral Videos, Photos & Articles</p>
 
-    <!-- ==================== HERO ==================== -->
+            <div class="search-box">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search videos..."
+                >
 
-    <section class="hero">
+                <button type="button" onclick="searchSite()">
+                    Search
+                </button>
+            </div>
+        </div>
+    </section>
 
-      <div>
 
-        <p class="tag">
-          🔥 VIRAL • TRENDING • DISCOVER
-        </p>
+    <!-- ================= VIDEOS ================= -->
+    <section id="videos">
+        <div class="container">
 
-        <h1>
-          What's going viral <span>today?</span>
-        </h1>
+            <h2>Latest Videos</h2>
+
+            <div id="videoList">
+                <p>Videos will appear here.</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= PHOTOS ================= -->
+    <section id="photos">
+        <div class="container">
+
+            <h2>Latest Photos</h2>
+
+            <div id="photoList">
+                <p>Photos will appear here.</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= ARTICLES ================= -->
+    <section id="articles">
+        <div class="container">
+
+            <h2>Latest Articles</h2>
+
+            <div id="articleList">
+                <p>Articles will appear here.</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= ADMIN ================= -->
+    <section id="admin">
+
+        <!-- ADMIN LOGIN -->
+        <div id="adminLoginSection" class="admin-section">
+
+            <div class="admin-login-box">
+
+                <h2>Admin Login</h2>
+
+                <p>
+                    Sirf authorized admin login kar sakta hai.
+                </p>
+
+                <input
+                    type="email"
+                    id="adminUsername"
+                    placeholder="Admin Email"
+                    autocomplete="username"
+                >
+
+                <input
+                    type="password"
+                    id="adminPassword"
+                    placeholder="Admin Password"
+                    autocomplete="current-password"
+                >
+
+                <button
+                    type="button"
+                    onclick="adminLogin()"
+                >
+                    Login
+                </button>
+
+                <p id="loginStatus"></p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADMIN PANEL -->
+        <div
+            id="adminPanel"
+            class="admin-section"
+            style="display: none;"
+        >
+
+            <div class="admin-panel">
+
+                <div class="admin-header">
+
+                    <div>
+                        <h2>Admin Panel</h2>
+                        <p>ViralVideos Management</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onclick="adminLogout()"
+                    >
+                        Logout
+                    </button>
+
+                </div>
+
+
+                <!-- DASHBOARD -->
+                <div class="dashboard">
+
+                    <h3>Dashboard</h3>
+
+                    <div class="dashboard-grid">
+
+                        <div class="dashboard-card">
+                            <h4>Videos</h4>
+                            <span id="videoCount">0</span>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h4>Photos</h4>
+                            <span id="photoCount">0</span>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h4>Articles</h4>
+                            <span id="articleCount">0</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VIDEO UPLOAD -->
+                <div class="admin-box">
+
+                    <h3>Upload Free Video</h3>
+
+                    <label for="videoTitle">
+                        Video Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="videoTitle"
+                        placeholder="Enter video title"
+                    >
+
+
+                    <label for="videoCategory">
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="videoCategory"
+                        placeholder="Example: Funny"
+                    >
+
+
+                    <label for="videoCountry">
+                        Country
+                    </label>
+
+                    <input
+                        type="text"
+                        id="videoCountry"
+                        placeholder="Example: Pakistan"
+                    >
+
+
+                    <label for="videoFile">
+                        Video File
+                    </label>
+
+                    <input
+                        type="file"
+                        id="videoFile"
+                        accept="video/*"
+                    >
+
+
+                    <label for="videoDescription">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="videoDescription"
+                        placeholder="Enter video description"
+                    ></textarea>
+
+
+                    <button
+                        type="button"
+                        onclick="uploadVideo()"
+                    >
+                        Upload Video
+                    </button>
+
+                    <p id="videoStatus"></p>
+
+                </div>
+
+
+                <!-- PHOTO UPLOAD -->
+                <div class="admin-box">
+
+                    <h3>Upload Photo</h3>
+
+                    <label for="photoTitle">
+                        Photo Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="photoTitle"
+                        placeholder="Enter photo title"
+                    >
+
+
+                    <label for="photoCategory">
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="photoCategory"
+                        placeholder="Example: Viral"
+                    >
+
+
+                    <label for="photoFile">
+                        Photo File
+                    </label>
+
+                    <input
+                        type="file"
+                        id="photoFile"
+                        accept="image/*"
+                    >
+
+
+                    <label for="photoDescription">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="photoDescription"
+                        placeholder="Enter photo description"
+                    ></textarea>
+
+
+                    <button
+                        type="button"
+                        onclick="uploadPhoto()"
+                    >
+                        Upload Photo
+                    </button>
+
+                    <p id="photoStatus"></p>
+
+                </div>
+
+
+                <!-- ARTICLE -->
+                <div class="admin-box">
+
+                    <h3>Add Article</h3>
+
+                    <label for="articleTitle">
+                        Article Title
+                    </label>
+
+                    <input
+                        type="text"
+                        id="articleTitle"
+                        placeholder="Enter article title"
+                    >
+
+
+                    <label for="articleCategory">
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="articleCategory"
+                        placeholder="Example: News"
+                    >
+
+
+                    <label for="articleContent">
+                        Article Content
+                    </label>
+
+                    <textarea
+                        id="articleContent"
+                        rows="8"
+                        placeholder="Write article..."
+                    ></textarea>
+
+
+                    <button
+                        type="button"
+                        onclick="addArticle()"
+                    >
+                        Publish Article
+                    </button>
+
+                    <p id="articleStatus"></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
 
         <p>
-          Discover trending videos, photos, celebrity moments,
-          creators and stories from around the world.
+            © 2026 ViralVideos. All Rights Reserved.
         </p>
 
-        <div class="search">
+    </footer>
 
-          <input
-            id="search"
-            type="search"
-            placeholder="Search videos, stars, countries..."
-          >
 
-          <button type="button" onclick="searchSite()">
-            Search
-          </button>
+    <!-- ================= SUPABASE ================= -->
 
-        </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      </div>
-
-    </section>
-
-
-    <!-- ==================== TRENDING ==================== -->
-
-    <section id="trending" class="section">
-
-      <h2>Trending Now</h2>
-
-      <div class="grid">
-
-        <article>
-          <div class="thumb">▶️</div>
-          <h3>Top Viral Moments This Week</h3>
-          <p>Trending now • 1.2M views</p>
-        </article>
-
-        <article>
-          <div class="thumb">🎬</div>
-          <h3>Latest Creator Highlights</h3>
-          <p>Trending now • 845K views</p>
-        </article>
-
-        <article>
-          <div class="thumb">✨</div>
-          <h3>Celebrity Viral Moments</h3>
-          <p>Trending now • 620K views</p>
-        </article>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================== VIDEO CATEGORIES ==================== -->
-
-    <section id="videos" class="section">
-
-      <h2>Video Categories</h2>
-
-      <div class="chips">
-
-        <span>Viral Videos</span>
-        <span>TikTok</span>
-        <span>Funny</span>
-        <span>Sports</span>
-        <span>Music</span>
-        <span>Fitness</span>
-        <span>Travel</span>
-        <span>News</span>
-        <span>Entertainment</span>
-        <span>Creators</span>
-        <span>Gym Trainers</span>
-        <span>Yoga Trainers</span>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================== GALLERY ==================== -->
-
-    <section id="gallery" class="section">
-
-      <h2>Photos &amp; Gallery</h2>
-
-      <div class="gallery">
-
-        <div>
-          📸
-          <b>Viral Photos</b>
-        </div>
-
-        <div>
-          🌍
-          <b>World Gallery</b>
-        </div>
-
-        <div>
-          ⭐
-          <b>Celebrity Gallery</b>
-        </div>
-
-        <div>
-          🎭
-          <b>Entertainment</b>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================== STARS ==================== -->
-
-    <section id="stars" class="section">
-
-      <h2>Popular Stars &amp; Creators</h2>
-
-      <div class="cards">
-
-        <div>TikTok Stars</div>
-        <div>Bollywood Stars</div>
-        <div>Hollywood Stars</div>
-        <div>Sports Stars</div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================== COUNTRIES ==================== -->
-
-    <section id="countries" class="section">
-
-      <h2>Explore by Country</h2>
-
-      <div class="chips countries">
-
-        Pakistan • India • USA • UK • UAE • Saudi Arabia •
-        Qatar • Turkey • Canada • Australia • Bangladesh •
-        Indonesia • Malaysia • Germany • France • Italy •
-        Spain • Brazil • Japan • Korea • South Africa •
-        Egypt • Nigeria • Mexico • World
-
-      </div>
-
-    </section>
-
-
-    <!-- ==================== PREMIUM ==================== -->
-
-    <section id="premium" class="premium">
-
-      <h2>⭐ Premium Videos</h2>
-
-      <p>
-        Premium content area for your future subscription system.
-      </p>
-
-      <button type="button">
-        Explore Premium
-      </button>
-
-    </section>
-
-
-    <!-- ==================== CREATOR / SELLER ==================== -->
-
-    <section class="creator">
-
-      <h2>Become a Creator / Seller</h2>
-
-      <p>
-        Upload your own original or licensed content and build
-        your audience. Payments and seller earnings require
-        a secure backend.
-      </p>
-
-      <button
-        type="button"
-        onclick="document.getElementById('admin').scrollIntoView()"
-      >
-        Start Creating
-      </button>
-
-    </section>
-
-
-    <!-- ========================================================= -->
-    <!-- ==================== ADMIN PANEL ======================== -->
-    <!-- ========================================================= -->
-
-    <section id="admin" class="admin section">
-
-      <h2>⚙️ Admin Control Panel</h2>
-
-      <p>
-        Manage your website content, users, creators,
-        categories and settings.
-      </p>
-
-
-      <!-- ==================== ADMIN LOGIN ==================== -->
-
-      <div class="admin-login">
-
-        <h3>🔐 Admin Login</h3>
-
-        <label for="adminUsername">
-          Username
-        </label>
-
-        <input
-          id="adminUsername"
-          type="text"
-          placeholder="Admin username"
-        >
-
-        <label for="adminPassword">
-          Password
-        </label>
-
-        <input
-          id="adminPassword"
-          type="password"
-          placeholder="Admin password"
-        >
-
-        <button
-          type="button"
-          onclick="adminLogin()"
-        >
-          Login
-        </button>
-
-        <p id="loginStatus"></p>
-
-      </div>
-
-
-      <!-- ==================== DASHBOARD ==================== -->
-
-      <div id="adminDashboard" class="admin-panel">
-
-        <h2>📊 Dashboard</h2>
-
-        <div class="admin-dashboard">
-
-          <div class="admin-stat">
-            <strong id="totalVideos">0</strong>
-            <span>Total Videos</span>
-          </div>
-
-          <div class="admin-stat">
-            <strong id="totalPhotos">0</strong>
-            <span>Total Photos</span>
-          </div>
-
-          <div class="admin-stat">
-            <strong id="totalArticles">0</strong>
-            <span>Total Articles</span>
-          </div>
-
-          <div class="admin-stat">
-            <strong id="totalCreators">0</strong>
-            <span>Creators</span>
-          </div>
-
-          <div class="admin-stat">
-            <strong id="totalUsers">0</strong>
-            <span>Users</span>
-          </div>
-
-          <div class="admin-stat">
-            <strong id="totalReports">0</strong>
-            <span>Reports</span>
-          </div>
-
-        </div>
-
-
-        <!-- ==================== ADMIN OPTIONS ==================== -->
-
-        <div class="admin-grid">
-
-
-          <div class="admin-card">
-            <h3>🎬 Upload Video</h3>
-            <p>Add a new video.</p>
-            <button type="button"
-              onclick="openAdminSection('videoUpload')">
-              Upload Video
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🖼️ Upload Photo</h3>
-            <p>Add a new gallery photo.</p>
-            <button type="button"
-              onclick="openAdminSection('photoUpload')">
-              Upload Photo
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>📝 Add Article</h3>
-            <p>Create a new story or article.</p>
-            <button type="button"
-              onclick="openAdminSection('articleUpload')">
-              Add Article
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🔥 Trending</h3>
-            <p>Manage trending content.</p>
-            <button type="button"
-              onclick="openAdminSection('trendingManage')">
-              Manage Trending
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🎥 Videos</h3>
-            <p>Edit or remove videos.</p>
-            <button type="button"
-              onclick="openAdminSection('videoManage')">
-              Manage Videos
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🖼️ Gallery</h3>
-            <p>Manage photos and gallery.</p>
-            <button type="button"
-              onclick="openAdminSection('galleryManage')">
-              Manage Gallery
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>📂 Categories</h3>
-            <p>Add or edit categories.</p>
-            <button type="button"
-              onclick="openAdminSection('categoryManage')">
-              Manage Categories
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🌍 Countries</h3>
-            <p>Manage country sections.</p>
-            <button type="button"
-              onclick="openAdminSection('countryManage')">
-              Manage Countries
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>👤 Creators</h3>
-            <p>Manage creators and sellers.</p>
-            <button type="button"
-              onclick="openAdminSection('creatorManage')">
-              Manage Creators
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>👥 Users</h3>
-            <p>Manage website users.</p>
-            <button type="button"
-              onclick="openAdminSection('userManage')">
-              Manage Users
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>⭐ Premium</h3>
-            <p>Manage premium content.</p>
-            <button type="button"
-              onclick="openAdminSection('premiumManage')">
-              Manage Premium
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>💰 Earnings</h3>
-            <p>View creator earnings.</p>
-            <button type="button"
-              onclick="openAdminSection('earningsManage')">
-              Earnings
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>💳 Payments</h3>
-            <p>Manage payment records.</p>
-            <button type="button"
-              onclick="openAdminSection('paymentManage')">
-              Payments
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>💬 Comments</h3>
-            <p>Review comments.</p>
-            <button type="button"
-              onclick="openAdminSection('commentManage')">
-              Comments
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🚩 Reports</h3>
-            <p>Review reported content.</p>
-            <button type="button"
-              onclick="openAdminSection('reportManage')">
-              Reports
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>📢 Advertisements</h3>
-            <p>Manage advertising areas.</p>
-            <button type="button"
-              onclick="openAdminSection('adsManage')">
-              Manage Ads
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>📊 Analytics</h3>
-            <p>View website statistics.</p>
-            <button type="button"
-              onclick="openAdminSection('analyticsManage')">
-              Analytics
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>⚙️ Website Settings</h3>
-            <p>Control website settings.</p>
-            <button type="button"
-              onclick="openAdminSection('settingsManage')">
-              Settings
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>🔐 Security</h3>
-            <p>Manage administrator security.</p>
-            <button type="button"
-              onclick="openAdminSection('securityManage')">
-              Security
-            </button>
-          </div>
-
-
-          <div class="admin-card">
-            <h3>💾 Backup</h3>
-            <p>Backup and restore data.</p>
-            <button type="button"
-              onclick="openAdminSection('backupManage')">
-              Backup
-            </button>
-          </div>
-
-        </div>
-
-
-        <!-- ===================================================== -->
-        <!-- ================= VIDEO UPLOAD ====================== -->
-        <!-- ===================================================== -->
-
-        <div id="videoUpload" class="admin-form">
-
-          <h2>🎬 Upload Video</h2>
-
-          <label for="videoTitle">
-            Video Title
-          </label>
-
-          <input
-            id="videoTitle"
-            type="text"
-            placeholder="Enter video title"
-          >
-
-          <label for="videoCategory">
-            Category
-          </label>
-
-          <select id="videoCategory">
-
-            <option>Viral Videos</option>
-            <option>TikTok</option>
-            <option>Funny</option>
-            <option>Sports</option>
-            <option>Music</option>
-            <option>Fitness</option>
-            <option>Travel</option>
-            <option>News</option>
-            <option>Entertainment</option>
-            <option>Creators</option>
-            <option>Gym Trainers</option>
-            <option>Yoga Trainers</option>
-
-          </select>
-
-          <label for="videoCountry">
-            Country
-          </label>
-
-          <input
-            id="videoCountry"
-            type="text"
-            placeholder="Enter country"
-          >
-
-          <label for="videoFile">
-            Video File
-          </label>
-
-          <input
-            id="videoFile"
-            type="file"
-            accept="video/*"
-          >
-
-          <label for="videoDescription">
-            Description
-          </label>
-
-          <textarea
-            id="videoDescription"
-            placeholder="Enter video description"
-          ></textarea>
-
-          <button
-            type="button"
-            onclick="uploadVideo()"
-          >
-            Upload Video
-          </button>
-
-          <p id="videoStatus"></p>
-
-        </div>
-
-
-        <!-- ================= PHOTO UPLOAD ================= -->
-
-        <div id="photoUpload" class="admin-form">
-
-          <h2>🖼️ Upload Photo</h2>
-
-          <label for="photoTitle">
-            Photo Title
-          </label>
-
-          <input
-            id="photoTitle"
-            type="text"
-            placeholder="Enter photo title"
-          >
-
-          <label for="photoCategory">
-            Category
-          </label>
-
-          <input
-            id="photoCategory"
-            type="text"
-            placeholder="Enter photo category"
-          >
-
-          <label for="photoFile">
-            Photo File
-          </label>
-
-          <input
-            id="photoFile"
-            type="file"
-            accept="image/*"
-          >
-
-          <label for="photoDescription">
-            Description
-          </label>
-
-          <textarea
-            id="photoDescription"
-            placeholder="Enter photo description"
-          ></textarea>
-
-          <button
-            type="button"
-            onclick="uploadPhoto()"
-          >
-            Upload Photo
-          </button>
-
-          <p id="photoStatus"></p>
-
-        </div>
-
-
-        <!-- ================= ARTICLE ================= -->
-
-        <div id="articleUpload" class="admin-form">
-
-          <h2>📝 Add Article</h2>
-
-          <label for="articleTitle">
-            Article Title
-          </label>
-
-          <input
-            id="articleTitle"
-            type="text"
-            placeholder="Enter article title"
-          >
-
-          <label for="articleCategory">
-            Article Category
-          </label>
-
-          <input
-            id="articleCategory"
-            type="text"
-            placeholder="Enter category"
-          >
-
-          <label for="articleImage">
-            Cover Image
-          </label>
-
-          <input
-            id="articleImage"
-            type="file"
-            accept="image/*"
-          >
-
-          <label for="articleContent">
-            Article Content
-          </label>
-
-          <textarea
-            id="articleContent"
-            rows="10"
-            placeholder="Write your article..."
-          ></textarea>
-
-          <button
-            type="button"
-            onclick="addArticle()"
-          >
-            Publish Article
-          </button>
-
-          <p id="articleStatus"></p>
-
-        </div>
-
-
-        <!-- ================= MANAGEMENT AREA ================= -->
-
-        <div
-          id="adminManager"
-          class="admin-manager"
-        >
-
-          <h2 id="managerTitle">
-            Admin Management
-          </h2>
-
-          <p id="managerMessage">
-            Select an Admin option above.
-          </p>
-
-          <div id="managerContent"></div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- ==================== FOOTER ==================== -->
-
-  <footer>
-
-    <strong>ViralVideos</strong>
-
-    <p>
-      © 2026 ViralVideos.
-      Use only content you own or have permission to publish.
-    </p>
-
-    <div>
-      About • Contact • Privacy • Terms • DMCA •
-      Disclaimer • Community Guidelines
-    </div>
-
-  </footer>
-
-
-  <!-- ==================== SCRIPT ==================== -->
-
-  <script src="script.js"></script>
+    <!-- YOUR JAVASCRIPT -->
+    <script src="script.js"></script>
 
 </body>
-            </html>
+                          </html>
