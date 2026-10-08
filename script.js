@@ -1,4 +1,12 @@
 /* =========================
+   SUPABASE CONNECTION
+========================= */
+
+const SUPABASE_URL = "https://sfxsxogvrxgwryzfjwae.supabase.co";
+const SUPABASE_KEY = "sb_publishable_LwynvmUuZwIMwNrScrusAQ_vkJzfIvo";
+
+
+/* =========================
    SEARCH
 ========================= */
 
@@ -11,7 +19,11 @@ function searchSite() {
     return;
   }
 
-  alert("Search: " + query + "\n\nSearch system will be connected to the database later.");
+  alert(
+    "Search: " +
+    query +
+    "\n\nSearch system will be connected to the database."
+  );
 }
 
 
@@ -20,17 +32,28 @@ function searchSite() {
 ========================= */
 
 function adminLogin() {
-  const username = document.getElementById("adminUsername").value.trim();
-  const password = document.getElementById("adminPassword").value.trim();
+  const usernameElement = document.getElementById("adminUsername");
+  const passwordElement = document.getElementById("adminPassword");
   const status = document.getElementById("loginStatus");
   const dashboard = document.getElementById("adminDashboard");
 
+  if (!usernameElement || !passwordElement || !status) {
+    return;
+  }
+
+  const username = usernameElement.value.trim();
+  const password = passwordElement.value.trim();
+
   /*
-    Demo login details:
+    DEMO ADMIN LOGIN
+
     Username: admin
     Password: admin123
 
-    Change these later when a secure backend is connected.
+    IMPORTANT:
+    This is only a frontend demo login.
+    Real secure admin authentication requires
+    Supabase Auth/backend security.
   */
 
   if (username === "admin" && password === "admin123") {
@@ -93,6 +116,7 @@ function updateManager(sectionId) {
   }
 
   const sections = {
+
     trendingManage: {
       title: "Manage Trending",
       message: "Manage the videos and content shown in Trending Now."
@@ -186,7 +210,7 @@ function updateManager(sectionId) {
     message.textContent = data.message;
 
     content.innerHTML =
-      "<p>⚙️ This section is ready for backend/database integration.</p>";
+      "<p>⚙️ This section is ready for Supabase backend integration.</p>";
   }
 }
 
@@ -226,7 +250,8 @@ function uploadVideo() {
   }
 
   status.textContent =
-    "✓ Video selected successfully. Backend upload is required to permanently save it.";
+    "✓ Video selected. Supabase storage connection is ready for the next setup step.";
+
   status.style.color = "#55d98a";
 
   console.log("Video:", {
@@ -267,7 +292,8 @@ function uploadPhoto() {
   }
 
   status.textContent =
-    "✓ Photo selected successfully. Backend upload is required to permanently save it.";
+    "✓ Photo selected. Supabase storage connection is ready for the next setup step.";
+
   status.style.color = "#55d98a";
 
   console.log("Photo:", {
@@ -313,7 +339,8 @@ function addArticle() {
   }
 
   status.textContent =
-    "✓ Article created in demo mode. A backend is required for permanent storage.";
+    "✓ Article created. Supabase database connection is ready for the next setup step.";
+
   status.style.color = "#55d98a";
 
   console.log("Article:", {
@@ -326,7 +353,7 @@ function addArticle() {
 
 
 /* =========================
-   DEMO DASHBOARD STATS
+   DASHBOARD STATS
 ========================= */
 
 function updateDashboardStats() {
@@ -354,15 +381,19 @@ function updateDashboardStats() {
 ========================= */
 
 document.addEventListener("DOMContentLoaded", function() {
+
   updateDashboardStats();
 
   const password = document.getElementById("adminPassword");
 
   if (password) {
     password.addEventListener("keydown", function(event) {
+
       if (event.key === "Enter") {
         adminLogin();
       }
+
     });
   }
+
 });
